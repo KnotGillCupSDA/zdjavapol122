@@ -1,6 +1,6 @@
 package com.sda.testingadvanced.parametrized.period.solution;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -9,6 +9,7 @@ import java.time.ZoneOffset;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -66,6 +67,12 @@ class PeriodUtilTest {
 				)
 
 		);
+	}
+
+	@Test
+	void shouldThrowExceptionWhenBothDatesAreNull() {
+		Assertions.assertThrows(RuntimeException.class, () -> PeriodUtil.getPeriod(null, null));
+		//Assertions.assertThrowsExactly(RuntimeException.class, () -> PeriodUtil.getPeriod(null, null));
 	}
 
 	private static Instant getInstant(int year, int month, int dayOfMonth) {

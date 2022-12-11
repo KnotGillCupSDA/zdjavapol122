@@ -20,11 +20,11 @@ public class PeriodUtil {
 	 * @param from beginning of the period
 	 * @param to   end of the period
 	 * @return classified to year-month
-	 * @throws java.lang.IllegalArgumentException when both dates are null or to is before from
+	 * @throws MyRuntimeException when both dates are null or to is before from
 	 */
 	public static YearMonth getPeriod(Instant from, Instant to) {
 		if (from == null && to == null) {
-			throw new IllegalArgumentException("One of the date should not be null");
+			throw new MyRuntimeException("One of the date should not be null");
 		}
 
 		if (from != null) {
