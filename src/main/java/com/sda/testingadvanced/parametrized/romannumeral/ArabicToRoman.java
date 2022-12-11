@@ -1,6 +1,6 @@
 package com.sda.testingadvanced.parametrized.romannumeral;
 
-enum ArabicToRoman {
+public enum ArabicToRoman {
 	THOUSAND(1000, "M"),
 	NINE_HUNDRED(900, "CM"),
 	FIVE_HUNDRED(500, "D"),
