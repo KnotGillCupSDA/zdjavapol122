@@ -18,6 +18,7 @@ class PalindromeCheckerTest {
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/palindrome.csv")
+	//@CsvFileSource(files = "src/test/resources/palindrome.csv")
 	void testedPalindrome2(String text, boolean expected) {
 		assertEquals(expected, PalindromeChecker.isPalindrome(text));
 	}
