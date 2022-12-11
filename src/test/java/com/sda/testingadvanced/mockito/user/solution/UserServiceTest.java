@@ -1,15 +1,19 @@
 package com.sda.testingadvanced.mockito.user.solution;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sda.testingadvanced.mockito.user.User;
@@ -20,31 +24,51 @@ import com.sda.testingadvanced.mockito.user.UserValidator;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
+	private static final Long USER_ID = 1234L;
+	private static final User USER = new User(USER_ID, "Jan", "Kowalski");
+
 	@Mock
 	private UserRepository userRepository;
 
 	@Mock
 	private UserValidator userValidator;
-
 	@InjectMocks
 	private UserService userService;
 
 	@Test
 	void shouldGetUserById() {
-		//given
-		final long userId = 7L;
-		User user = new User(userId, "Tomasz", "Woźniak");
+		when(userRepository.findById(USER_ID)).thenReturn(Optional.of(USER));
 
-		when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		assertEquals(USER, userService.getUserById(USER_ID));
+	}
+
+	@Test
+	void shouldThrowExceptionWhenUserNotFound() {
+		assertThrows(NoSuchElementException.class, () -> userService.getUserById(1L));
+	}
+
+	@Test
+	void shouldAddValidUser() {
+		//given
+		when(userValidator.isUserValid(USER)).thenReturn(true);
 
 		//when
-		User userById = userService.getUserById(userId);
+		userService.addUser(USER);
 
 		//then
-		assertNotNull(userById);
-		assertEquals(user, userById);
-		verify(userRepository, times(1)).findById(anyLong());
-		verify(userValidator, never()).isUserValid(any());
-		verifyNoInteractions(userValidator);
+		//verify that user repository add method has been called
+		verify(userRepository, times(1)).addUser(USER);
+	}
+
+	@Test
+	void shouldThrowExceptionAndNotCallRepositoryWhenAddingInvalidUser() {
+		//given
+		when(userValidator.isUserValid(USER)).thenReturn(false);
+
+		//when
+		assertThrows(IllegalArgumentException.class, () -> userService.addUser(USER));
+
+		//verifyNoInteractions(userRepository);
+		verify(userRepository, never()).addUser(USER);
 	}
 }
