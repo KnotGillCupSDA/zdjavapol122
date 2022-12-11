@@ -1,5 +1,7 @@
 package com.sda.testingadvanced.mockito.user;
 
+import java.util.Optional;
+
 public class UserService {
 
 	private final UserRepository userRepository;
@@ -11,7 +13,8 @@ public class UserService {
 	}
 
 	public User getUserById(final Long id) {
-		return userRepository.findById(id).orElseThrow();
+		Optional<User> byId = userRepository.findById(id);
+		return byId.orElseThrow();
 	}
 
 	public User addUser(final User user) {
