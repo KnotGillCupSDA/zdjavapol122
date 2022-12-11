@@ -6,6 +6,9 @@ public class PalindromeChecker {
 	 * @return true if text is null or empty or a palindrome
 	 */
 	public static boolean isPalindrome(String text) {
-		return false;
+		if(text == null) {
+			return false;
+		}
+		return new StringBuilder(text).reverse().toString().equalsIgnoreCase(text);
 	}
 }
